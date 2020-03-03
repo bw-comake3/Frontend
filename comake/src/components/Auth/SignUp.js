@@ -1,29 +1,29 @@
 import React from 'react'
-import axios from "axios";
-import * as Yup from 'yup';
-import useInput from "../../hooks/input"
+import * as yup from 'yup';
+import Typography from "@material-ui/core/Typography";
+import { Link } from "react-router-dom";
 
-export default function SignUp({ history, values, errors, touched}) {
-  //history.push('/signIn')
-  const [username, setUsername, handleUsername] = useInput('');
-  const [password, setPassword, handlePassword] = useInput('');
-  const handleSubmit = (e) => {
-      console.log({ username: username, password: password })
-      e.preventDefault()
-      axios
-          .post("http://localhost:5000/api/auth/register", { username: username, password: password })
-          .then(res => console.log("this is response from login", res))
-          .catch(err => console.log(err.message))
-  }
-  const validationSchema = () => Yup.object().shape({
-      username: Yup.string().required('enter username'),
-      password: Yup.string().required('enter password')
-      
+import useInput from "../../hooks/input"
+import { register, getUsers } from "../../actions";
+import { connect } from "react-redux";
+
+const SignUp = ({ history, values, errors, touched, register, getUsers}) => {
+    const [username, handleUsername] = useInput('');
+    const [password, handlePassword] = useInput('');
+    const validationSchema = () => yup.object().shape({
+        username: yup.string().required('enter username'),
+        password: yup.string().required('enter password')  
   })
+    const handleSubmit = async (e) => { 
+        e.preventDefault()
+        await register({ username, password })
+        setTimeout(history.push("/dashboard"), 1000)
+    }
   return (
       <div>
           <form onSubmit={ handleSubmit }>
              <input 
+             required
              type='text'
              name="username"
              placeholder="username"
@@ -32,6 +32,7 @@ export default function SignUp({ history, values, errors, touched}) {
               {/* {touched.username && errors.username && <p className ="errors">* {errors.username}</p>} */}
              
              <input 
+             required
              type='password'
              name="password"
              placeholder="password"
@@ -40,7 +41,14 @@ export default function SignUp({ history, values, errors, touched}) {
              {/* {touched.password && errors.password && <p className = 'errors'>* {errors.password}</p>} */}
              <button type ='submit'>Sign Up</button>
           </form>
+          <Typography>Already have an account? <Link to="/">Log In</Link></Typography>
+            <button onClick={ () => getUsers() }>Get Users</button>
       </div>
   )
 }
 
+const mapStateToProps = (state) => {
+    return { state }
+}
+
+export default connect(mapStateToProps, { register, getUsers })(SignUp)
