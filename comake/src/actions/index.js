@@ -12,16 +12,17 @@ export const DELETE_ISSUE = "DELETE_ISSUE";
 export const ADD_USER = "ADD_USER";
 export const ADD_VOTE = "ADD_VOTE";
 export const SUBTRACT_VOTE = "SUBTRACT_VOTE";
-export const IS_LOADING = "IS_LOADING";
 
 export const getUsers = () => dispatch => {
     axios
         .get("https://comake-3.herokuapp.com/api/auth/users")
-        .then(res => console.log("these are users", res.data))
+        .then(res => {
+            dispatch({ type: GET_USERS, users: res.data })
+            console.log("users:", res.data)
+        })
 }
 
 export const register = (user) => dispatch => {
-    dispatch({ type: IS_LOADING })
         console.log(user)
         axios
             .post("https://comake-3.herokuapp.com/api/auth/register", user)
@@ -34,7 +35,6 @@ export const register = (user) => dispatch => {
 }
 
 export const login = (user) => dispatch => {
-    dispatch({ type: IS_LOADING })
     axiosWithAuth()
     .post("/api/auth/login", user)
     .then(res => localStorage.setItem("token", res.data.token))
@@ -42,7 +42,21 @@ export const login = (user) => dispatch => {
 }
 
 export const getIssues = () => dispatch => {
-    
+    axiosWithAuth()
+    .get("/api/issues")
+    .then(res => {
+        dispatch({ type: GET_ALL_ISSUES, issues: res.data })
+        // console.log("issues:", res.data)
+    })
+}
+
+export const getIssueById = (id) => dispatch => {
+    axiosWithAuth()
+        .get(`/api/issues/${ id }`)
+        .then(res => {
+            dispatch({ type: GET_SPEC_ISSUE, issue: res.data })
+            console.log("response from getspecid", res)
+        })
 }
 
 export const getMyIssues = (id) => dispatch => {

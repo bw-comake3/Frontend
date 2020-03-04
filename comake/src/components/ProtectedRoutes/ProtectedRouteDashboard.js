@@ -1,21 +1,38 @@
 import React, { useEffect } from "react";
+import { connect } from "react-redux";
+import { Link } from "react-router-dom";
 
-import axiosWithAuth from "../../utils/axiosWithAuth";
+import { getIssues } from "../../actions";
 
-export default function ProtectedRouteDashboard({ history }) {
+const ProtectedRouteDashboard = ({ history, getIssues, issues }) => {
     useEffect( () => {
-        axiosWithAuth()
-            .get("/api/issues")
-            .then(res => console.log("these are issues", res))
-    } ,[])
+        getIssues()
+    }, [getIssues])
     const logout = () => {
         localStorage.removeItem("token")
         history.push("/")
     }
     return (
         <div>
-            issue, description, vote, city
+            {(issues) ?
+            issues.map(issue => 
+            <div key={ Math.random() }>
+                <p><Link to={ `/issues/${ issue.id }` }>{issue.issue}</Link></p>
+                <p>{issue.description}</p>
+                <p>{issue.vote}</p>
+                <p>{issue.city}</p>
+            </div>
+            ):<p>loading</p> }
             <button onClick={ logout }>Log Out</button>
         </div>
     )
 }
+
+const mapStateToProps = (state) => {
+    console.log(state)
+    return { 
+        ...state, issues: state.issues
+    }
+}
+
+export default connect(mapStateToProps, { getIssues })(ProtectedRouteDashboard)

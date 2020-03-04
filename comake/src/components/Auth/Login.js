@@ -38,13 +38,13 @@ const useStyles = makeStyles(theme => ({
 const Login = ({ history, values, errors, touched, login, getUsers }) => {
   const [username, setUsername, handleUsername] = useInput("");
   const [password, setPassword, handlePassword] = useInput("");
-  const handleSubmit = async e => {
+  const handleSubmit = e => {
     console.log({ username, password });
     e.preventDefault();
-    await login({ username, password })
+    login({ username, password })
     setUsername("")
     setPassword("")
-    history.push("/dashboard")
+    setTimeout(() => history.push("/dashboard"), 1000)
   };
   // const validationSchema = () => Yup.object().shape({
   //     username: Yup.string().required("enter username"),

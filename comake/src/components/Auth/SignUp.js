@@ -17,116 +17,84 @@ import { connect } from "react-redux";
 
 const useStyles = makeStyles(theme => ({
     paper: {
-      marginTop: theme.spacing(8),
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
+        marginTop: theme.spacing(8),
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
     },
     avatar: {
-      margin: theme.spacing(1),
-      backgroundColor: theme.palette.secondary.main,
+        margin: theme.spacing(1),
+        backgroundColor: theme.palette.secondary.main,
     },
     form: {
-      width: '100%', 
-      marginTop: theme.spacing(1),
+        width: '100%', 
+        marginTop: theme.spacing(1),
     },
     submit: {
-      margin: theme.spacing(3, 0, 2),
+        margin: theme.spacing(3, 0, 2),
     },
-  }));
-
-export default function SignUp({ history, values, errors, touched}) {
-  //history.push('/signIn')
-  const [username, setUsername, handleUsername] = useInput('');
-  const [password, setPassword, handlePassword] = useInput('');
-  const handleSubmit = (e) => {
-      console.log({ username: username, password: password })
-      e.preventDefault()
-      axios
-          .post("http://localhost:5000/api/auth/register", { username: username, password: password })
-          .then(res => console.log("this is response from login", res))
-          .catch(err => console.log(err.message))
-  }
-  const validationSchema = () => Yup.object().shape({
-      username: Yup.string().required('enter username'),
-      password: Yup.string().required('enter password')
-  })
-      
+}));
 const SignUp = ({ history, values, errors, touched, register, getUsers}) => {
+    const classes = useStyles(); 
     const [username, handleUsername] = useInput('');
     const [password, handlePassword] = useInput('');
     const validationSchema = () => yup.object().shape({
         username: yup.string().required('enter username'),
         password: yup.string().required('enter password')  
   })
-    const handleSubmit = async (e) => { 
+    const handleSubmit = (e) => { 
         e.preventDefault()
-        await register({ username, password })
-        setTimeout(history.push("/dashboard"), 1000)
+        register({ username, password })
+        setTimeout(() => history.push("/dashboard"), 2000)
     }
   return (
     <div>
-      <Container component="main" maxWidth="xs">
-      <CssBaseline />
-      <div className={classes.paper}>
-        <Avatar className={classes.avatar}>
-
-        </Avatar>
-        <Typography component="h1" variant="h5">
-          Sign Up
-        </Typography>
-        <form className={classes.form} onSubmit={handleSubmit} >
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            id="username"
-            label="username"
-            name="username"
-            autoComplete="username"
-            autoFocus
-            onChange={e => handleUsername(e.target.value)}
-          />
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            name="password"
-            label="Password"
-            type="password"
-            id="password"
-            autoComplete="current-password"
-            onChange={e => handlePassword(e.target.value)}
-          />
-                
-            <TextField
-              variant="outlined"
-              margin="normal"
-              required
-              fullWidth
-              id="email"
-              label="Email Address"
-              name="email"
-              autoComplete="email"
-              autoFocus
-            />
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            color="primary"
-            className={classes.submit}
-          >
-            Sign Up!
-          </Button>
-        </form>
-      </div>
-      <Box mt={8}>
-      
-      </Box>
-    </Container>
+        <Container component="main" maxWidth="xs">
+        <CssBaseline />
+            <div className={classes.paper}>
+                <Avatar className={classes.avatar} />
+                <Typography component="h1" variant="h5">
+                  Sign Up
+                </Typography>
+                <form className={classes.form} onSubmit={handleSubmit} >
+                    <TextField
+                        variant="outlined"
+                        margin="normal"
+                        required
+                        fullWidth
+                        id="username"
+                        label="username"
+                        name="username"
+                        autoComplete="username"
+                        autoFocus
+                        onChange={e => handleUsername(e.target.value)}
+                  />
+                    <TextField
+                        variant="outlined"
+                        margin="normal"
+                        required
+                        fullWidth
+                        name="password"
+                        label="Password"
+                        type="password"
+                        id="password"
+                        autoComplete="current-password"
+                        onChange={e => handlePassword(e.target.value)}
+                  />
+                  
+                    <Button
+                        type="submit"
+                        fullWidth
+                        variant="contained"
+                        color="primary"
+                        className={classes.submit}>
+                    Sign Up!
+                    </Button>
+                </form>
+            </div>
+                <Box mt={8} />
+        </Container>
+        <button onClick={ () => getUsers() }>Get Users</button>
   </div>
   )
 }
