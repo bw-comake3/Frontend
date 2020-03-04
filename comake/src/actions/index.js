@@ -2,7 +2,6 @@ import axios from "axios";
 
 import axiosWithAuth from "./../utils/axiosWithAuth";
 
-export const GET_USERS = "GET_USERS";
 export const GET_ALL_ISSUES = "GET_ALL_ISSUES";
 export const GET_USER_ISSUES = "GET_USER_ISSUES";
 export const GET_SPEC_ISSUE = "GET_SPEC_ISSUE";
@@ -10,15 +9,7 @@ export const DELETE_SPEC_ISSUE = "DELETE_SPEC_ISSUE";
 export const ADD_ISSUE = "ADD_ISSUE";
 export const EDIT_ISSUE = "EDIT_ISSUE";
 export const DELETE_ISSUE = "DELETE_ISSUE";
-export const ADD_USER = "ADD_USER";
-export const ADD_VOTE = "ADD_VOTE";
-export const SUBTRACT_VOTE = "SUBTRACT_VOTE";
-
-export const getUsers = () => dispatch => {
-    axios
-        .get("https://comake-3.herokuapp.com/api/auth/users")
-        .then(res => { dispatch({ type: GET_USERS, users: res.data }) })
-}
+export const VOTE = "VOTE";
 
 export const register = (user) => dispatch => {
         axios
@@ -65,14 +56,11 @@ export const getIssueById = (id) => dispatch => {
         .then(res => { dispatch({ type: GET_SPEC_ISSUE, issue: res.data }) })
 }
 
-export const getMyIssues = (id) => dispatch => {
-        
-}
 
 export const addIssue = (issue) => dispatch => {
     console.log(issue)
     axiosWithAuth()
-        .post(`/api/${ localStorage.getItem("id") }/issues/`, issue)
+        .post(`/api/${ localStorage.getItem("id") }/issues`, issue)
         .then(res => dispatch({ type: ADD_ISSUE, issue: res.data }))
         .catch(err => console.log("there was an error adding issue", err.message))
 }
@@ -90,13 +78,15 @@ export const deleteIssue = (id) => dispatch => {
 }
 
 export const upVote = (id, issue) => dispatch => {
+    console.log("this is issue in vote", issue)
     axiosWithAuth()
-        .patch(`/api/${ id }`, { ...issue, vote: issue.vote + 1 })
-        .then(res => console.log("response from vote patch", res.data))
+        .patch(`/api/issues/${ id }`, { vote: issue.vote + 1 })
+        .then(res => dispatch({ type: VOTE, issue: res.data }))
 }
 
 export const downVote = (id, issue) => dispatch => {
+    console.log("this is issue in vote", issue)
     axiosWithAuth()
-        .patch(`/api/${ id }`, { ...issue, vote: issue.vote - 1 })
-        .then(res => console.log("response from vote patch", res.data))
+        .patch(`/api/issues/${ id }`, { vote: issue.vote - 1 })
+        .then(res => dispatch({ type: VOTE, issue: res.data }))
 }

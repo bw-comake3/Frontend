@@ -1,16 +1,14 @@
-import React, { useEffect, useState } from "react"
+import React, { useEffect } from "react"
 import { useRouteMatch } from "react-router-dom";
 import { connect } from "react-redux";
 
-
-import useInput from "../../hooks/input";
 import { getIssueById, upVote, downVote } from "../../actions";
 
 const ProtectedRouteIssue = ({ history, issues, getIssueById, upVote, downVote }) => {
     const match = useRouteMatch()
     useEffect(() => {
         getIssueById(match.params.id)
-    },[])
+    },[getIssueById, match.params.id])
     return (
         <div>
             <div>
@@ -20,8 +18,16 @@ const ProtectedRouteIssue = ({ history, issues, getIssueById, upVote, downVote }
                         <p>{issue.issue}</p>
                         <p>{issue.description}</p>
                         <p>Votes {issue.vote}</p>
-                        <button onClick={ () => upVote(issue.id, issue) }>UpVote</button>
-                        <button onClick={ () => downVote(issue.id, issue) }>DownVote</button>
+                        <button onClick={ () => { 
+                        upVote(issue.id, issue) 
+                        setTimeout(() => window.location.reload(), 500)
+                        return false;
+                        } }>UpVote</button>
+                        <button onClick={ () => { 
+                        downVote(issue.id, issue)
+                        setTimeout(() => window.location.reload(), 500)
+                        return false;
+                        } }>DownVote</button>
                         <p>{issue.city}</p>
                         <p>{issue.zip}</p>
                     </div>

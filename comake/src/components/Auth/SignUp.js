@@ -9,10 +9,10 @@ import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import * as yup from 'yup';
 import { Link } from "react-router-dom";
+import { connect } from "react-redux";
 
 import useInput from "../../hooks/input"
-import { register, getUsers } from "../../actions";
-import { connect } from "react-redux";
+import { register } from "../../actions";
 
 const useStyles = makeStyles(theme => ({
     paper: {
@@ -46,15 +46,13 @@ const SignUp = ({ history, values, errors, touched, register, getUsers}) => {
         register({ username, password })
         setTimeout(() => history.push("/dashboard"), 2000)
     }
-  return (
+return (
     <div>
         <Container component="main" maxWidth="xs">
-        <CssBaseline />
+            <CssBaseline />
             <div className={classes.paper}>
                 <Avatar className={classes.avatar} />
-                <Typography component="h1" variant="h5">
-                  Sign Up
-                </Typography>
+                <Typography component="h1" variant="h5">Sign Up</Typography>
                 <form className={classes.form} onSubmit={handleSubmit} >
                     <TextField
                         variant="outlined"
@@ -67,7 +65,7 @@ const SignUp = ({ history, values, errors, touched, register, getUsers}) => {
                         autoComplete="username"
                         autoFocus
                         onChange={e => handleUsername(e.target.value)}
-                  />
+                    />
                     <TextField
                         variant="outlined"
                         margin="normal"
@@ -79,7 +77,7 @@ const SignUp = ({ history, values, errors, touched, register, getUsers}) => {
                         id="password"
                         autoComplete="current-password"
                         onChange={e => handlePassword(e.target.value)}
-                  />
+                    />
                   
                     <Button
                         type="submit"
@@ -87,16 +85,13 @@ const SignUp = ({ history, values, errors, touched, register, getUsers}) => {
                         variant="contained"
                         color="primary"
                         className={classes.submit}>
-                    Sign Up!
-                    </Button>
+                    Sign Up!</Button>
                 </form>
                 <Typography>Already have an account? <Link to="/">Log In</Link></Typography>
             </div>
-                <Box mt={8} />
         </Container>
-        <button onClick={ () => getUsers() }>Get Users</button>
-  </div>
-  )
+    </div>
+)
 }
 
 
@@ -104,4 +99,4 @@ const mapStateToProps = (state) => {
   return { state }
 }
 
-export default connect(mapStateToProps, { register, getUsers })(SignUp)
+export default connect(mapStateToProps, { register })(SignUp)

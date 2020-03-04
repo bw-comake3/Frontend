@@ -1,37 +1,62 @@
 import React, { useEffect } from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
-
+import { makeStyles } from '@material-ui/core/styles';
+import Card from '@material-ui/core/Card';
+import CardActionArea from '@material-ui/core/CardActionArea';
+import CardActions from '@material-ui/core/CardActions';
+import CardContent from '@material-ui/core/CardContent';
+import Button from '@material-ui/core/Button';
+import Typography from '@material-ui/core/Typography';
 import { getIssues, upVote, downVote, addIssue } from "../../actions";
 
+const useStyles = makeStyles({
+    root: {
+      maxWidth: 800,
+    },
+  });
+
 const ProtectedRouteDashboard = ({ history, getIssues, issues, upVote, downVote, id }) => {
+    const classes = useStyles();
     useEffect( () => {
         getIssues()
-        console.log(id)
-    }, [getIssues])
+    }, [getIssues, id, upVote, downVote])
     const logout = () => {
         localStorage.removeItem("token")
         history.push("/")
     }
-    const handleSubmit = (e) => { 
-        e.preventDefault()
-        return null 
-    }
+
     return (
         <div>
-            <button onClick={ () => history.push("/addIssue") }>Add an Issue</button><button onClick={ () => history.push("/myIssues") }>My Issues</button>
+            
+            
+            <Button size="small" color="primary" onClick={ () => history.push("/addIssue") }>Add an Issue</Button><Button size="small" color="primary" onClick={ () => history.push("/myIssues") }>My Issues</Button>
+            <Card className={classes.root}>
             {(issues) ?
             issues.map(issue => 
             <div key={ Math.random() }>
-                <p><Link to={ `/issues/${ issue.id }` }>{ issue.issue }</Link></p>
-                <p>{ issue.description }</p>
+                <CardContent>
+                <Typography gutterBottom variant="h5" component="h2"><Link to={ `/issues/${ issue.id }` }>{ issue.issue }</Link></Typography>
+                <Typography variant="body2" color="textSecondary" component="p">{ issue.description }</Typography>
                 <p>Votes { issue.vote }</p>
-                <button onClick={ () => upVote(issue.id) }>UpVote</button><button onClick={ () => downVote(issue.id) }>DownVote</button>
+                </CardContent>
+                <Button size="small" color="primary" onClick={ () => { 
+                    upVote(issue.id, issue)
+                    setTimeout(() => window.location.reload(), 500)
+                    return false;
+                } }>UpVote</Button>
+                <Button size="small" color="primary" onClick={ () => { 
+                    downVote(issue.id, issue)
+                    setTimeout(() => window.location.reload(), 500)
+                    return false;
+                } }>DownVote</Button>
+                
                 <p>City: {issue.city}</p>
                 <p>Zip: { issue.zip }</p>
             </div>
             ):<p>loading</p> }
             <button onClick={ logout }>Log Out</button>
+            </Card>
         </div>
     )
 }
