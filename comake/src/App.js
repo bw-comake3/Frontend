@@ -9,6 +9,8 @@ import PrivateRoute from "./components/ProtectedRoutes/PrivateRoute";
 import ProtectedRouteDashboard from "./components/ProtectedRoutes/ProtectedRouteDashboard";
 import ProtectedRouteIssue from "./components/ProtectedRoutes/ProtectedRouteIssue";
 import ProtectedRouteAddIssue from "./components/ProtectedRoutes/ProtectedRouteAddIssue";
+import ProtectedRouteMyIssues from "./components/ProtectedRoutes/ProtectedRouteMyIssues";
+import ProtectedRouteMyIssue from "./components/ProtectedRoutes/ProtectedRouteMyIssue";
 
 function App() {
   return (
@@ -19,6 +21,8 @@ function App() {
           <PrivateRoute path="/dashboard" component={ ProtectedRouteDashboard } />
           <PrivateRoute path="/issues/:id" component={ ProtectedRouteIssue } />
           <PrivateRoute path="/addIssue" component={ ProtectedRouteAddIssue } />
+          <PrivateRoute path="/myIssues/:id" component={ ProtectedRouteMyIssue } />
+          <PrivateRoute path="/myIssues" component={ ProtectedRouteMyIssues } />
       </Switch>
     </div>
   );

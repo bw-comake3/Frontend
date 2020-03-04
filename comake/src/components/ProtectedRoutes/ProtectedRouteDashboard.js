@@ -3,11 +3,11 @@ import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 
 import { getIssues, upVote, downVote, addIssue } from "../../actions";
-import useInput from "../../hooks/input";
 
-const ProtectedRouteDashboard = ({ history, getIssues, issues, upVote, downVote, addIssue }) => {
+const ProtectedRouteDashboard = ({ history, getIssues, issues, upVote, downVote, id }) => {
     useEffect( () => {
         getIssues()
+        console.log(id)
     }, [getIssues])
     const logout = () => {
         localStorage.removeItem("token")
@@ -19,7 +19,7 @@ const ProtectedRouteDashboard = ({ history, getIssues, issues, upVote, downVote,
     }
     return (
         <div>
-            <button onClick={ () => history.push("/addIssue") }>Add an Issue</button>
+            <button onClick={ () => history.push("/addIssue") }>Add an Issue</button><button onClick={ () => history.push("/myIssues") }>My Issues</button>
             {(issues) ?
             issues.map(issue => 
             <div key={ Math.random() }>
@@ -37,6 +37,7 @@ const ProtectedRouteDashboard = ({ history, getIssues, issues, upVote, downVote,
 }
 
 const mapStateToProps = (state) => {
+    console.log("this is state after render", state)
     return { 
         ...state, issues: state.issues
     }

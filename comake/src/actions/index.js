@@ -4,6 +4,7 @@ import axiosWithAuth from "./../utils/axiosWithAuth";
 
 export const GET_USERS = "GET_USERS";
 export const GET_ALL_ISSUES = "GET_ALL_ISSUES";
+export const GET_USER_ISSUES = "GET_USER_ISSUES";
 export const GET_SPEC_ISSUE = "GET_SPEC_ISSUE";
 export const DELETE_SPEC_ISSUE = "DELETE_SPEC_ISSUE";
 export const ADD_ISSUE = "ADD_ISSUE";
@@ -25,7 +26,11 @@ export const register = (user) => dispatch => {
             .then(res => 
                 axios
                     .post("https://comake-3.herokuapp.com/api/auth/login", user)
-                    .then(res => localStorage.setItem("token", res.data.token))
+                    .then(res => {
+                        localStorage.setItem("token", res.data.token)
+                        localStorage.setItem("id", res.data.id)
+                        console.log(res)
+                    })
                     .catch(err => console.log("error logging in automatically", err.message)))
             .catch(err => console.log("error signing up",err.message))
 }
@@ -33,7 +38,10 @@ export const register = (user) => dispatch => {
 export const login = (user) => dispatch => {
     axiosWithAuth()
     .post("/api/auth/login", user)
-    .then(res => localStorage.setItem("token", res.data.token))
+    .then(res => {
+        localStorage.setItem("token", res.data.token)
+        localStorage.setItem("id", res.data.id)
+    })
     .catch(err => console.log(err.message));
 }
 
@@ -45,6 +53,12 @@ export const getIssues = () => dispatch => {
     })
 }
 
+export const getUserIssues = () => dispatch => {
+    axiosWithAuth()
+        .get(`/api/${ localStorage.getItem("id") }/issues`)
+        .then(res => dispatch({ type:GET_USER_ISSUES, issues: res.data }))
+}
+
 export const getIssueById = (id) => dispatch => {
     axiosWithAuth()
         .get(`/api/issues/${ id }`)
@@ -52,14 +66,15 @@ export const getIssueById = (id) => dispatch => {
 }
 
 export const getMyIssues = (id) => dispatch => {
-    
+        
 }
 
 export const addIssue = (issue) => dispatch => {
     console.log(issue)
     axiosWithAuth()
-        .post(`/api/${ Math.floor(Math.random() * 1000) + 1 }/issues/`, issue)
-        .then(res => console.log(res))
+        .post(`/api/${ localStorage.getItem("id") }/issues/`, issue)
+        .then(res => dispatch({ type: ADD_ISSUE, issue: res.data }))
+        .catch(err => console.log("there was an error adding issue", err.message))
 }
 
 export const editIssue = (id, issue) => dispatch => {
@@ -74,13 +89,14 @@ export const deleteIssue = (id) => dispatch => {
         .then(res => dispatch({ type: DELETE_SPEC_ISSUE, id }))
 }
 
-export const upVote = (id) => dispatch => {
+export const upVote = (id, issue) => dispatch => {
     axiosWithAuth()
+        .patch(`/api/${ id }`, { ...issue, vote: issue.vote + 1 })
+        .then(res => console.log("response from vote patch", res.data))
 }
 
-export const downVote = (id) => dispatch => {
+export const downVote = (id, issue) => dispatch => {
     axiosWithAuth()
-}
-export const loading = () => dispatch => {
-    
+        .patch(`/api/${ id }`, { ...issue, vote: issue.vote - 1 })
+        .then(res => console.log("response from vote patch", res.data))
 }
