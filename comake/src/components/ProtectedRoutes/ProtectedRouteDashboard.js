@@ -14,9 +14,15 @@ import { getIssues, upVote, downVote, addIssue } from "../../actions";
 
 const useStyles = makeStyles({
     root: {
-      maxWidth: 800,
+
+      maxWidth: '65vw',
+      width: '65vw',
       marginTop: 20,
     },
+    // cActions: {
+    //     display: 'flex',
+    //     justifyContent: 'space-between'
+    // }
   });
 
 const ProtectedRouteDashboard = ({ history, getIssues, issues, upVote, downVote, id }) => {
@@ -42,13 +48,29 @@ const ProtectedRouteDashboard = ({ history, getIssues, issues, upVote, downVote,
             issues.map(issue => 
             <Card className={classes.root}  key={ Math.random() }>
                 <CardContent>
-                <Typography gutterBottom variant="h5" component="h2"><Link to={ `/issues/${ issue.id }` }>{ issue.issue }</Link></Typography>
-                <Typography >{ issue.description }</Typography>
-                <Typography>Votes { issue.vote }</Typography>
+                    <Typography gutterBottom variant="h5" component="h2"><Link to={ `/issues/${ issue.id }` }>{ issue.issue }</Link></Typography>
+                    <Typography >{ issue.description }</Typography>
+                    <Typography className="centerText">
+                        <div className="displayFlex">
+                            <div>Votes </div>
+                            <div className="DecorateVoteNum">{ issue.vote }</div>
+                        </div>
+                    </Typography>
                 </CardContent>
-                <Button size="small" color="primary" onClick={ () => upVote(issue.id, issue) }>UpVote</Button><Button size="small" color="primary" onClick={ () => downVote(issue.id, issue) }>DownVote</Button>
-                <p>City: {issue.city}</p>
-                <p>Zip: { issue.zip }</p>
+                <CardActions className='cActions'>
+                    <div className="flex-row">
+                        <div>      
+                            <Button size="small" color="primary" onClick={ () => upVote(issue.id, issue) }>UpVote</Button><Button size="small" color="primary" onClick={ () => downVote(issue.id, issue) }>DownVote</Button>
+                        </div>
+                        <div className="flex-row2">
+                            <Typography>City: {issue.city}</Typography>
+                            <Typography>Zip: { issue.zip }</Typography>
+                        </div>
+                    </div>
+                    <div>
+                        <img className="imgSize" src="https://cdn.pixabay.com/photo/2017/06/16/07/27/under-construction-2408066_960_720.png" alt="test image"/>
+                    </div>
+                </CardActions>
             </Card>
             ):<p>loading</p> }
         </div>
