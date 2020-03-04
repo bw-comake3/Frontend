@@ -14,7 +14,8 @@ SUBTRACT_VOTE
 
 const initState = {
     users: [],
-    issues: []
+    issues: [],
+    user_id: ""
 }
 
 export const rootReducer = (state  = initState, action) => {

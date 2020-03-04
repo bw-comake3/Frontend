@@ -19,7 +19,7 @@ const ProtectedRouteDashboard = ({ history, getIssues, issues, upVote, downVote,
     }
     return (
         <div>
-            <button><Link to="/addIssue">Add an Issue</Link></button>
+            <button onClick={ () => history.push("/addIssue") }>Add an Issue</button>
             {(issues) ?
             issues.map(issue => 
             <div key={ Math.random() }>
