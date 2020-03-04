@@ -29,7 +29,6 @@ const ProtectedRouteDashboard = ({ history, getIssues, issues }) => {
 }
 
 const mapStateToProps = (state) => {
-    console.log(state)
     return { 
         ...state, issues: state.issues
     }

@@ -24,8 +24,9 @@ export const rootReducer = (state  = initState, action) => {
         case GET_ALL_ISSUES:
             return { ...state, issues: action.issues }  
         case GET_SPEC_ISSUE:
-            console.log(action.issue)
-            return { ...state, issues: [action.issue] }              
+            return { ...state, issues: [action.issue] }
+        case EDIT_ISSUE:
+            return { ...state }              
         default:
             return state
         }

@@ -39,7 +39,6 @@ const Login = ({ history, values, errors, touched, login, getUsers }) => {
   const [username, setUsername, handleUsername] = useInput("");
   const [password, setPassword, handlePassword] = useInput("");
   const handleSubmit = e => {
-    console.log({ username, password });
     e.preventDefault();
     login({ username, password })
     setUsername("")
