@@ -8,6 +8,7 @@ import SignUp from "./components/Auth/SignUp";
 import PrivateRoute from "./components/ProtectedRoutes/PrivateRoute";
 import ProtectedRouteDashboard from "./components/ProtectedRoutes/ProtectedRouteDashboard";
 import ProtectedRouteIssue from "./components/ProtectedRoutes/ProtectedRouteIssue";
+import ProtectedRouteAddIssue from "./components/ProtectedRoutes/ProtectedRouteAddIssue";
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
           <Route path="/signup" render={ (props) => <SignUp { ...props } /> } />
           <PrivateRoute path="/dashboard" component={ ProtectedRouteDashboard } />
           <PrivateRoute path="/issues/:id" component={ ProtectedRouteIssue } />
+          <PrivateRoute path="/addIssue" component={ ProtectedRouteAddIssue } />
       </Switch>
     </div>
   );

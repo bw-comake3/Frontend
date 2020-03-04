@@ -56,24 +56,30 @@ export const getMyIssues = (id) => dispatch => {
 }
 
 export const addIssue = (issue) => dispatch => {
-    
+    console.log(issue)
+    axiosWithAuth()
+        .post(`/api/${ Math.floor(Math.random() * 1000) + 1 }/issues/`, issue)
+        .then(res => console.log(res))
 }
 
 export const editIssue = (id, issue) => dispatch => {
     axiosWithAuth()
         .put(`/api/issues/${ id }`, issue)
+        .then(res => console.log("response from put", res))
 }
 
 export const deleteIssue = (id) => dispatch => {
-    
+    axiosWithAuth()
+        .delete(`/api/issues/${ id }`)
+        .then(res => dispatch({ type: DELETE_SPEC_ISSUE, id }))
 }
 
-export const upVote = () => dispatch => {
-    
+export const upVote = (id) => dispatch => {
+    axiosWithAuth()
 }
 
-export const downVote = () => dispatch => {
-    
+export const downVote = (id) => dispatch => {
+    axiosWithAuth()
 }
 export const loading = () => dispatch => {
     

@@ -26,7 +26,9 @@ export const rootReducer = (state  = initState, action) => {
         case GET_SPEC_ISSUE:
             return { ...state, issues: [action.issue] }
         case EDIT_ISSUE:
-            return { ...state }              
+            return { ...state, issues: state.issues.map(issue => (issue.id === action.issue.id) ? action.issue[0] : issue) }     
+        case DELETE_SPEC_ISSUE:
+            return { ...state, issues: state.issues.filter(issue => issue.id === action.id) }         
         default:
             return state
         }

@@ -2,9 +2,10 @@ import React, { useEffect } from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 
-import { getIssues } from "../../actions";
+import { getIssues, upVote, downVote, addIssue } from "../../actions";
+import useInput from "../../hooks/input";
 
-const ProtectedRouteDashboard = ({ history, getIssues, issues }) => {
+const ProtectedRouteDashboard = ({ history, getIssues, issues, upVote, downVote, addIssue }) => {
     useEffect( () => {
         getIssues()
     }, [getIssues])
@@ -12,15 +13,22 @@ const ProtectedRouteDashboard = ({ history, getIssues, issues }) => {
         localStorage.removeItem("token")
         history.push("/")
     }
+    const handleSubmit = (e) => { 
+        e.preventDefault()
+        return null 
+    }
     return (
         <div>
+            <button><Link to="/addIssue">Add an Issue</Link></button>
             {(issues) ?
             issues.map(issue => 
             <div key={ Math.random() }>
-                <p><Link to={ `/issues/${ issue.id }` }>{issue.issue}</Link></p>
-                <p>{issue.description}</p>
-                <p>{issue.vote}</p>
-                <p>{issue.city}</p>
+                <p><Link to={ `/issues/${ issue.id }` }>{ issue.issue }</Link></p>
+                <p>{ issue.description }</p>
+                <p>Votes { issue.vote }</p>
+                <button onClick={ () => upVote(issue.id) }>UpVote</button><button onClick={ () => downVote(issue.id) }>DownVote</button>
+                <p>City: {issue.city}</p>
+                <p>Zip: { issue.zip }</p>
             </div>
             ):<p>loading</p> }
             <button onClick={ logout }>Log Out</button>
@@ -34,4 +42,4 @@ const mapStateToProps = (state) => {
     }
 }
 
-export default connect(mapStateToProps, { getIssues })(ProtectedRouteDashboard)
+export default connect(mapStateToProps, { getIssues, upVote, downVote, addIssue })(ProtectedRouteDashboard)

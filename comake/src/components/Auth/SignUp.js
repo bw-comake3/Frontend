@@ -91,6 +91,7 @@ const SignUp = ({ history, values, errors, touched, register, getUsers}) => {
                     Sign Up!
                     </Button>
                 </form>
+                <Typography>Already have an account? <Link to="/">Log In</Link></Typography>
             </div>
                 <Box mt={8} />
         </Container>

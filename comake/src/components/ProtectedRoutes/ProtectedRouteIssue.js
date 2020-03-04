@@ -5,20 +5,23 @@ import { getIssueById, editIssue, deleteIssue } from "../../actions";
 
 import useInput from "../../hooks/input";
 
-const ProtectedRouteIssue = ({ issues, getIssueById, editIssue }) => {
-    const [editing, setEditing] = useState(false)
-    const [name, handleName] = useInput("")
-    const [desc, handleDesc] = useInput("")
-    const [city, handleCity] = useInput("")
-    const handleSubmit = (e) => {
-        e.preventDefault()
-        editIssue(match.params.id, { name, desc, city })
-        setEditing(false)
-    }
+const ProtectedRouteIssue = ({ history, issues, getIssueById, editIssue, deleteIssue }) => {
+    const [isEditing, setIsEditing] = useState(false)
     const match = useRouteMatch()
     useEffect(() => {
         getIssueById(match.params.id)
-    } ,[getIssueById]) 
+    } ,[]) 
+    
+    const [name, handleName] = useInput("")
+    const [desc, handleDesc] = useInput("")
+    const [city, handleCity] = useInput("")
+    const [zip, handleZip] = useInput("")
+    const handleSubmit = (e) => {
+    e.preventDefault()
+        editIssue(match.params.id, { issue: name, description: desc, city, zip })
+        setIsEditing(!isEditing)
+        history.push("/dashboard")
+    }
     return (
         <div>
             <div>
@@ -26,25 +29,26 @@ const ProtectedRouteIssue = ({ issues, getIssueById, editIssue }) => {
                     <div key={ Math.random() }>
                         <p>{issue.issue}</p>
                         <p>{issue.description}</p>
-                        <p>{issue.vote}</p>
+                        <p>Votes {issue.vote}</p>
                         <p>{issue.city}</p>
+                        <p>{issue.zip}</p>
+                        <button onClick={ () => setIsEditing(!isEditing) }>Edit Issue</button>
                         <button onClick={ () => {
-                            setEditing(!editing)
-                             }
-                            }>Edit Issue</button>
-                        {(editing) ? 
-                            <form onSubmit={ handleSubmit }>
-                                <input required
-                                 type="text" placeholder="Issue" handleChange={ handleName }  />
-                                <input required
-                                 type="text" placeholder="Desc"  handleChange={ handleDesc } />
-                                <input required
-                                 type="text" placeholder="City"  handleChange={ handleCity } />
-                                <button type="submit">Save</button>
-                            </form> : null
-                        }
+                            deleteIssue(match.params.id)
+                            history.push("/dashboard")
+                         } 
+                         }>Delete Issue</button>
                     </div>
                 )): <p>Loading</p>}
+                {(isEditing) ?
+                    <form onSubmit={ handleSubmit }>
+                        <input required name="name" type="text" placeholder="Issue" onChange={ e => handleName(e.target.value) }  />
+                        <input required name="desc" type="text" placeholder="Description" onChange={ e => handleDesc(e.target.value) } />
+                        <input required name="city" type="text" placeholder="City" onChange={ e => handleCity(e.target.value) } />
+                        <input required name="zip" type="text" placeholder="Zip Code" onChange={ e => handleZip(e.target.value) } /> 
+                        <button type="submit">Save</button>
+                    </form> : null
+                }
             </div>
         </div>
     )
