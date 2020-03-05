@@ -71,3 +71,11 @@
     justify-content: space-evenly;
     width: 25%;
 }
+html{
+  /* background-color: #BFC9CA ; */
+  font-size: x-large;
+}
+.credit {
+  text-align: center;
+  display: none;
+}
