@@ -62,7 +62,7 @@ return (
           <Card className={classes.card} key={Math.random()}>
             <CardContent>
               <Typography size="large" gutterBottom variant="h5" component="h2">
-                <Link to={`/issues/${issue.id}`}>{issue.issue}</Link>
+                {issue.issue}
               </Typography>
               <Typography>{issue.description}</Typography>
               <Typography className="centerText">

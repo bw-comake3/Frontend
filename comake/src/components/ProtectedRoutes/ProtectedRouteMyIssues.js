@@ -65,7 +65,7 @@ return (
         issues.map(issue => 
             <Card className={classes.card}  key={ Math.random() }>
                 <CardContent>
-                    <Typography size='large' gutterBottom variant="h5" component="h2"><Link to={ `/issues/${ issue.id }` }>{ issue.issue }</Link></Typography>
+                    <Typography size='large' gutterBottom variant="h5" component="h2"><Link to={ `/myIssues/${ issue.id }` }>{ issue.issue }</Link></Typography>
                     <Typography >{ issue.description }</Typography>
                     <Typography className="centerText">
                         <div className="displayFlex">
@@ -84,9 +84,6 @@ return (
                             <Typography>City: {issue.city}</Typography>
                             <Typography>Zip: { issue.zip }</Typography>
                         </div>
-                    </div>
-                    <div>
-                        <img className="imgSize" src="https://cdn.pixabay.com/photo/2017/06/16/07/27/under-construction-2408066_960_720.png" alt="test image"/>
                     </div>
                 </CardActions>
             </Card>
