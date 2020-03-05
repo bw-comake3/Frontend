@@ -57,13 +57,11 @@ const ProtectedRouteDashboard = ({ history, getIssues, issues, upVote, downVote,
     const classes = useStyles();
 
     const [collapsed, setCollapsed] = useState(true);
-
     const toggleNavbar = () => setCollapsed(!collapsed);
 
 
     useEffect( () => {
         getIssues()
-        console.log(id)
     }, [getIssues])
     const logout = () => {
         localStorage.removeItem("token")
@@ -75,68 +73,89 @@ const ProtectedRouteDashboard = ({ history, getIssues, issues, upVote, downVote,
     }
 
     return (
-        <div>
-            <div className={classes.nava}>
-            <Navbar className={classes.navBar} dark>
-                <NavbarBrand href="/" fontWeight='bold' className="mr-auto">Comake</NavbarBrand>
-       <NavbarToggler backgroundColor="white" onClick={toggleNavbar} className="mr-2" />
-       <Collapse isOpen={!collapsed}>
-         <Nav  className={classes.navbar} >
-           <NavItem>
-                <NavLink onClick={ () => history.push("/addIssue") }>Add an Issue</NavLink>
-           </NavItem>
-            <NavItem>
-                <NavLink onClick={ () => history.push("/myIssues") }>My Issues</NavLink>
-            </NavItem>
-           <NavItem>
-                <NavLink onClick={ logout }>Log Out</NavLink>
-           </NavItem>
-         </Nav>
-       </Collapse>
-     </Navbar>
-                {/* <AppBar position="static">
-                    <Toolbar>
-                        <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
-                            <MenuIcon />
-                        </IconButton>
-                        <Typography variant="h6" className={classes.title}>
-                            Comake.
-                        </Typography>
-                    </Toolbar>
-                </AppBar> */}
-
-            </div>
-            
-            
-            {(issues) ?
-            issues.map(issue => 
-            <Card className={classes.card}  key={ Math.random() }>
-                <CardContent>
-                    <Typography size='large' gutterBottom variant="h5" component="h2"><Link to={ `/issues/${ issue.id }` }>{ issue.issue }</Link></Typography>
-                    <Typography >{ issue.description }</Typography>
-                    <Typography className="centerText">
-                        <div className="displayFlex">
-                            <div>Votes </div>
-                            <div className="DecorateVoteNum">{ issue.vote }</div>
-                        </div>
-                    </Typography>
-                </CardContent>
-                <Divider className={classes.divider} light />
-                <CardActions className='cActions'>
-                    <div className="flex-row">
-                        <div>      
-                            <Button size="small" color="primary" onClick={ () => upVote(issue.id, issue) }>UpVote</Button><Button size="small" color="primary" onClick={ () => downVote(issue.id, issue) }>DownVote</Button>
-                        </div>
-                        <div className="flex-row2">
-                            <Typography>City: {issue.city}</Typography>
-                            <Typography>Zip: { issue.zip }</Typography>
-                        </div>
-                    </div>
-                </CardActions>
-            </Card>
-            ):<p>loading</p> }
+      <div>
+        <div className={classes.nava}>
+          <Navbar className={classes.navBar} dark>
+            <NavbarBrand href="/" fontWeight="bold" className="mr-auto">
+              Comake
+            </NavbarBrand>
+            <NavbarToggler
+              backgroundColor="white"
+              onClick={toggleNavbar}
+              className="mr-2"
+            />
+            <Collapse isOpen={!collapsed}>
+              <Nav className={classes.navbar}>
+                <NavItem>
+                  <NavLink onClick={() => history.push("/addIssue")}>
+                    Add an Issue
+                  </NavLink>
+                </NavItem>
+                <NavItem>
+                  <NavLink onClick={() => history.push("/myIssues")}>
+                    My Issues
+                  </NavLink>
+                </NavItem>
+                <NavItem>
+                  <NavLink onClick={logout}>Log Out</NavLink>
+                </NavItem>
+              </Nav>
+            </Collapse>
+          </Navbar>
         </div>
-    )
+
+        {issues ? (
+          issues.map(issue => (
+            <Card className={classes.card} key={Math.random()}>
+              <CardContent>
+                <Typography
+                  size="large"
+                  gutterBottom
+                  variant="h5"
+                  component="h2"
+                >
+                  <Link to={`/issues/${issue.id}`}>{issue.issue}</Link>
+                </Typography>
+                <Typography>{issue.description}</Typography>
+                <Typography className="centerText">
+                  <div className="displayFlex">
+                    <div>Votes </div>
+                    <div className="DecorateVoteNum">{issue.vote}</div>
+                  </div>
+                </Typography>
+              </CardContent>
+              <Divider className={classes.divider} light />
+              <CardActions className="cActions">
+                <div className="flex-row">
+                  <div>
+                    <Button
+                      size="small"
+                      color="primary"
+                      onClick={() => upVote(issue.id, issue)}
+                    >
+                      UpVote
+                    </Button>
+                    <Button
+                      size="small"
+                      color="primary"
+                      onClick={() => downVote(issue.id, issue)}
+                    >
+                      DownVote
+                    </Button>
+                  </div>
+                  <div className="flex-row2">
+                    <Typography>City: {issue.city}</Typography>
+                    <Typography>Zip: {issue.zip}</Typography>
+                  </div>
+                </div>
+              </CardActions>
+            </Card>
+          ))
+        ) : (
+          <p>loading</p>
+        )}
+      </div>
+    );
 }
 
 const mapStateToProps = (state) => {
@@ -146,4 +165,4 @@ const mapStateToProps = (state) => {
     }
 }
 
-export default connect(mapStateToProps, { getIssues, upVote, downVote, addIssue })(ProtectedRouteDashboard)
+export default connect(mapStateToProps, { getIssues, upVote, downVote })(ProtectedRouteDashboard)

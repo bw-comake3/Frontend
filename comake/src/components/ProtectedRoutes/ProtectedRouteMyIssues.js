@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import { makeStyles } from '@material-ui/core/styles';
@@ -25,6 +25,16 @@ const useStyles = makeStyles (theme => ({
       width: '65vw',
       marginTop: 20,
     },
+    nava: {
+        height: '150px',
+
+    },
+    navBar: {
+        backgroundColor: '#17202A',
+        color: '#E5E7E9',
+        marginBottom: '100px',
+        height: '100%'
+    },
     card: {
         maxWidth: '65vw',
         
@@ -46,7 +56,8 @@ const useStyles = makeStyles (theme => ({
 const ProtectedRouteMyIssues = ({ history, getUserIssues, issues, upVote, downVote }) => {
     
     const classes = useStyles();
-
+    const [collapsed, setCollapsed] = useState(true);
+    const toggleNavbar = () => setCollapsed(!collapsed);
 
     useEffect(() => {
         getUserIssues()
@@ -57,9 +68,29 @@ const ProtectedRouteMyIssues = ({ history, getUserIssues, issues, upVote, downVo
     }
 return (
     <div>
-        <button onClick={ logout }>Log Out</button>
-        <button onClick={ () => history.push("/addIssue") }>Add an Issue</button>
-        <button onClick={ () => history.push("/dashboard") }>Go Back</button>
+        <div className={classes.nava}>
+            <Navbar className={classes.navBar} dark>
+                <NavbarBrand href="/" fontWeight='bold' className="mr-auto">Comake</NavbarBrand>
+                <NavbarToggler backgroundColor="white" onClick={toggleNavbar} className="mr-2" />
+                <Collapse isOpen={!collapsed}>
+                    <Nav  className={classes.navbar} >
+                        <NavItem>
+                            <NavLink onClick={ () => history.push("/addIssue") }>Add an Issue</NavLink>
+                        </NavItem>
+                        <NavItem>
+                            <NavLink onClick={ () => history.push("/dashboard") }>Go Back</NavLink>
+                        </NavItem>
+                        <NavItem>
+                            <NavLink onClick={ logout }>Log Out</NavLink>
+                        </NavItem>   
+                    </Nav>
+                </Collapse>
+            </Navbar>
+        </div>    
+
+       
+        
+        
         
         {(issues) ?
         issues.map(issue => 
@@ -78,7 +109,8 @@ return (
                 <CardActions className='cActions'>
                     <div className="flex-row">
                         <div>      
-                            <Button size="small" color="primary" onClick={ () => upVote(issue.id, issue) }>UpVote</Button><Button size="small" color="primary" onClick={ () => downVote(issue.id, issue) }>DownVote</Button>
+                            <Button size="small" color="primary" onClick={ () => upVote(issue.id, issue) }>UpVote</Button>
+                            <Button size="small" color="primary" onClick={ () => downVote(issue.id, issue) }>DownVote</Button>
                         </div>
                         <div className="flex-row2">
                             <Typography>City: {issue.city}</Typography>

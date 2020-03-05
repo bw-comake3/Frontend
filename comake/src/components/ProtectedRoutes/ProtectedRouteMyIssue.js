@@ -26,6 +26,16 @@ const useStyles = makeStyles (theme => ({
       width: '65vw',
       marginTop: 20,
     },
+    nava: {
+        height: '150px',
+
+    },
+    navBar: {
+        backgroundColor: '#17202A',
+        color: '#E5E7E9',
+        marginBottom: '100px',
+        height: '100%'
+    },
     card: {
         maxWidth: '65vw',
         
@@ -44,24 +54,30 @@ const useStyles = makeStyles (theme => ({
   }));
 
 
-const ProtectedRouteMyIssue = ({ history, issues, upVote, downVote, editIssue, deleteIssue, getIssueById }) => {
+const ProtectedRouteMyIssue = ({ history, issue, upVote, downVote, editIssue, deleteIssue, getIssueById }) => {
     const classes = useStyles();
+    const [collapsed, setCollapsed] = useState(true);
+    const toggleNavbar = () => setCollapsed(!collapsed);
 
     const match = useRouteMatch()
-    useEffect(() => {
-        getIssueById(match.params.id)        
-    }, [])
     const logout = () => {
         localStorage.removeItem("token")
         history.push("/")
     }
-    
     const [isEditing, setIsEditing] = useState(false)
-    const [name, handleName] = useInput("")
-    const [desc, handleDesc] = useInput("")
-    const [city, handleCity] = useInput("")
-    const [zip, handleZip] = useInput("")
-    
+    const [name, setName, handleName] = useInput("")
+    const [desc, setDesc, handleDesc] = useInput("")
+    const [city, setCity, handleCity] = useInput("")
+    const [zip, setZip, handleZip] = useInput("")
+    useEffect(() => {
+        getIssueById(match.params.id)       
+    }, [getIssueById])
+    useEffect(() => {
+        setName(issue.issue)
+        setDesc(issue.description)
+        setCity(issue.city)
+        setZip(issue.zip) 
+    } ,[issue])
     const handleSubmit = (e) => {
         e.preventDefault()
         editIssue(match.params.id, { issue: name, description: desc, city, zip })
@@ -71,12 +87,39 @@ const ProtectedRouteMyIssue = ({ history, issues, upVote, downVote, editIssue, d
     
 return (
     <div>
-        <button onClick={ logout }>Log Out</button>
-        <button onClick={ () => history.push("/addIssue") }>Add an Issue</button>
-        <button onClick={ () => history.push("/dashboard") }>Go Back</button>
+        <div className={classes.nava}>
+          <Navbar className={classes.navBar} dark>
+            <NavbarBrand href="/" fontWeight="bold" className="mr-auto">
+              Comake
+            </NavbarBrand>
+            <NavbarToggler
+              backgroundColor="white"
+              onClick={toggleNavbar}
+              className="mr-2"
+            />
+            <Collapse isOpen={!collapsed}>
+              <Nav className={classes.navbar}>
+                <NavItem>
+                    <NavLink onClick={ () => history.push("/dashboard") }>Go Back</NavLink>
+                </NavItem>
+                <NavItem>
+                  <NavLink onClick={() => history.push("/myIssues")}>
+                    My Issues
+                  </NavLink>
+                </NavItem>
+                <NavItem>
+                  <NavLink onClick={logout}>Log Out</NavLink>
+                </NavItem>
+              </Nav>
+            </Collapse>
+          </Navbar>
+        </div>
 
-        {(issues) ?
-        issues.map(issue => 
+
+
+     
+
+        {(issue) ? 
         <Card className={classes.card}  key={ Math.random() }>
              <CardContent>
                 <Typography size='large' gutterBottom variant="h5" component="h2">{ issue.issue }</Typography>
@@ -92,7 +135,8 @@ return (
                 <CardActions className='cActions'>
                     <div className="flex-row">
                         <div>      
-                            <Button size="small" color="primary" onClick={ () => upVote(issue.id, issue) }>UpVote</Button><Button size="small" color="primary" onClick={ () => downVote(issue.id, issue) }>DownVote</Button>
+                            <Button size="small" color="primary" onClick={ () => upVote(issue.id, issue) }>UpVote</Button>
+                            <Button size="small" color="primary" onClick={ () => downVote(issue.id, issue) }>DownVote</Button>
                         </div>
                         <div className="flex-row2">
                             <Typography>City: {issue.city}</Typography>
@@ -100,27 +144,28 @@ return (
                         </div>
                     </div>
                 </CardActions>
-        <button onClick={ () => setIsEditing(!isEditing) }>Edit Issue</button>
-        <button onClick={ () => {
+        <Button onClick={ () => setIsEditing(!isEditing) }>Edit Issue</Button>
+        <Button onClick={ () => {
             deleteIssue(match.params.id)
             history.push("/dashboard")
-            } }>Delete Issue</button>
+            } }>Delete Issue</Button>
         </Card>
-        ):<p>loading</p> }
+        :<p>loading</p> }
          {(isEditing) ?
                 <form onSubmit={ handleSubmit }>
-                    <input required name="name" type="text" placeholder="Issue" onChange={ e => handleName(e.target.value) }  />
-                    <input required name="desc" type="text" placeholder="Description" onChange={ e => handleDesc(e.target.value) } />
-                    <input required name="city" type="text" placeholder="City" onChange={ e => handleCity(e.target.value) } />
-                    <input required name="zip" type="text" placeholder="Zip Code" onChange={ e => handleZip(e.target.value) } /> 
-                    <button type="submit">Save</button>
+                    <input required name="name" type="text" value={ name } placeholder="Issue" onChange={ e => handleName(e.target.value) }  />
+                    <textarea required name="desc" type="text" value={ desc } placeholder="Description" onChange={ e => handleDesc(e.target.value) } />
+                    <input required name="city" type="text" value={ city } placeholder="City" onChange={ e => handleCity(e.target.value) } />
+                    <input required name="zip" type="text" value={ zip } placeholder="Zip Code" onChange={ e => handleZip(e.target.value) } /> 
+                    <Button type="submit">Save</Button>
                 </form> : null}
     </div>
     )
 }
 
 const mapStateToProps = (state) => {
-    return { ...state, issues: state.issues }
+    console.log(state.singleIssue)
+    return { ...state, issue: state.singleIssue }
 }
 
 export default connect(mapStateToProps, { upVote, downVote, editIssue, deleteIssue, getIssueById })(ProtectedRouteMyIssue)

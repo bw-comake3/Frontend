@@ -26,6 +26,16 @@ const useStyles = makeStyles (theme => ({
       width: '65vw',
       marginTop: 20,
     },
+    nava: {
+        height: '150px',
+
+    },
+    navBar: {
+        backgroundColor: '#17202A',
+        color: '#E5E7E9',
+        marginBottom: '100px',
+        height: '100%'
+    },
     card: {
         maxWidth: '65vw',
         
@@ -45,20 +55,30 @@ const useStyles = makeStyles (theme => ({
 
 
 
-const ProtectedRouteIssue = ({ history, issues, getIssueById, upVote, downVote }) => {
+const ProtectedRouteIssue = ({ history, issue, getIssueById, upVote, downVote }) => {
     const classes = useStyles();
-    
+    const [collapsed, setCollapsed] = useState(true);
+    const toggleNavbar = () => setCollapsed(!collapsed);
     const match = useRouteMatch()
     useEffect(() => {
         getIssueById(match.params.id)
-    },[])
+    },[getIssueById])
     
 return (
   <div>
+        <div className={classes.nava}>
+            <Navbar className={classes.navBar} dark>
+                <NavbarBrand href="/" fontWeight='bold' className="mr-auto">Comake</NavbarBrand>
+       <NavbarToggler backgroundColor="white" onClick={toggleNavbar} className="mr-2" />
+            <Collapse isOpen={!collapsed}>
+                <Nav  className={classes.navbar} >
+                    <NavLink onClick={ () => history.push("/dashboard") }>Go Back</NavLink>
+                </Nav>
+            </Collapse>
+         </Navbar>
+         </div>
     <div>
-      <button onClick={() => history.push("/dashboard")}>Go Back</button>
-      {issues ? (
-        issues.map(issue => (
+      {issue ? 
           <Card className={classes.card} key={Math.random()}>
             <CardContent>
               <Typography size="large" gutterBottom variant="h5" component="h2">
@@ -97,17 +117,14 @@ return (
                 </div>
               </div>
             </CardActions>
-          </Card>
-        ))
-      ) : (
-        <p>Loading</p>
-      )}
+          </Card> : <p>Loading</p>
+      }
     </div>
   </div>
 ); }
 
 const mapStateToProps = (state) => {
-    return { ...state, issues: state.issues }
+    return { ...state, issue: state.singleIssue }
 }
 
 export default connect(mapStateToProps, { getIssueById, upVote, downVote })(ProtectedRouteIssue)
