@@ -13,6 +13,7 @@
     "materialize-css": "^1.0.0",
     "react": "^16.13.0",
     "react-dom": "^16.13.0",
+    "react-hook-form": "^4.10.1",
     "react-materialize": "^3.5.9",
     "react-redux": "^7.2.0",
     "react-router-dom": "^5.1.2",
