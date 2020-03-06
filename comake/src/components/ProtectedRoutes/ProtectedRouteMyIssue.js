@@ -1,45 +1,44 @@
 import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import { useRouteMatch } from "react-router-dom";
-
-import { Collapse, Navbar, NavbarToggler, NavbarBrand, Nav, NavItem, NavLink } from 'reactstrap';
-
-import { makeStyles } from '@material-ui/core/styles';
-import Card from '@material-ui/core/Card';
-import CardActionArea from '@material-ui/core/CardActionArea';
-import CardActions from '@material-ui/core/CardActions';
-import CardContent from '@material-ui/core/CardContent';
-import CardMedia from '@material-ui/core/CardMedia';
+import { Collapse, Navbar, NavbarToggler, NavbarBrand, Nav, NavItem, NavLink } from "reactstrap";
+import { makeStyles } from "@material-ui/core/styles";
+import Card from "@material-ui/core/Card";
+import CardActions from "@material-ui/core/CardActions";
+import CardContent from "@material-ui/core/CardContent";
 import Divider from "@material-ui/core/Divider";
-import Button from '@material-ui/core/Button';
-import Typography from '@material-ui/core/Typography';
+import Button from "@material-ui/core/Button";
+import Typography from "@material-ui/core/Typography";
+import * as yup from "yup";
+import { useForm } from "react-hook-form";
 
 
 import { upVote, downVote, editIssue, deleteIssue, getIssueById } from "../../actions";
 import useInput from "../../hooks/input";
+import ErrorMessages from "./../ErrorMessages";
 
 const useStyles = makeStyles (theme => ({
 
     root: {
 
-      maxWidth: '65vw',
-      width: '65vw',
+      maxWidth: "65vw",
+      width: "65vw",
       marginTop: 20,
     },
     nava: {
-        height: '150px',
+        height: "150px",
 
     },
     navBar: {
-        backgroundColor: '#17202A',
-        color: '#E5E7E9',
-        marginBottom: '100px',
-        height: '100%'
+        backgroundColor: "#17202A",
+        color: "#E5E7E9",
+        marginBottom: "100px",
+        height: "100%"
     },
     card: {
-        maxWidth: '65vw',
+        maxWidth: "65vw",
         
-        width: '65vw',
+        width: "65vw",
         margin: "10px",
         transition: "0.3s",
         boxShadow: "0 8px 40px -12px rgba(0,0,0,0.3)",
@@ -49,7 +48,7 @@ const useStyles = makeStyles (theme => ({
       },
       divider: {
         margin: `px 0`,
-        padding:'0px 20 0 20'
+        padding:"0px 20 0 20"
       },
   }));
 
@@ -71,20 +70,37 @@ const ProtectedRouteMyIssue = ({ history, issue, upVote, downVote, editIssue, de
     const [zip, setZip, handleZip] = useInput("")
     useEffect(() => {
         getIssueById(match.params.id)       
-    }, [getIssueById])
+    }, [getIssueById, match.params.id])
     useEffect(() => {
         setName(issue.issue)
         setDesc(issue.description)
         setCity(issue.city)
         setZip(issue.zip) 
-    } ,[issue])
-    const handleSubmit = (e) => {
-        e.preventDefault()
+    } ,[setName, setDesc, setCity, setZip, issue.issue, issue.description, issue.city, issue.zip])
+    const handleEditIssue = (e) => {
         editIssue(match.params.id, { issue: name, description: desc, city, zip })
         setIsEditing(!isEditing)
         setTimeout(() => history.push("/myIssues"), 500)    
     }
-    
+    const validationSchema = yup.object().shape({
+        name: yup
+        .string()
+        .min(10, "Issue name must be a minimum of 10 characters")
+        .max(30, "Issue name cannot exceed 30 characters"),
+        desc: yup
+        .string()
+        .min(30, "Description must be a minimum of 30 characters")
+        .max(190, "Description cannot exceed 190 characters"),
+        city: yup
+        .string()
+        .min(3, "City must be a minimum of 3 characters")
+        .max(15, "City cannot exceed 15 characters"),
+        zip: yup
+        .number()
+        .min(5, "Zip code must be a minimum of 5 characters")
+        .max(99999, "Zip code cannot exceed 5 characters")
+    })
+    const { errors, register, handleSubmit } = useForm({ validationSchema })
 return (
     <div>
         <div className={classes.nava}>
@@ -122,7 +138,7 @@ return (
         {(issue) ? 
         <Card className={classes.card}  key={ Math.random() }>
              <CardContent>
-                <Typography size='large' gutterBottom variant="h5" component="h2">{ issue.issue }</Typography>
+                <Typography size="large" gutterBottom variant="h5" component="h2">{ issue.issue }</Typography>
                 <Typography>{ issue.description }</Typography>
                 <Typography className="centerText">
                     <div className="displayFlex">
@@ -132,7 +148,7 @@ return (
                 </Typography>
              </CardContent>
              <Divider className={classes.divider} light />
-                <CardActions className='cActions'>
+                <CardActions className="cActions">
                     <div className="flex-row">
                         <div>      
                             <Button size="small" color="primary" onClick={ () => upVote(issue.id, issue) }>UpVote</Button>
@@ -152,11 +168,12 @@ return (
         </Card>
         :<p>loading</p> }
          {(isEditing) ?
-                <form onSubmit={ handleSubmit }>
-                    <input required name="name" type="text" value={ name } placeholder="Issue" onChange={ e => handleName(e.target.value) }  />
-                    <textarea required name="desc" type="text" value={ desc } placeholder="Description" onChange={ e => handleDesc(e.target.value) } />
-                    <input required name="city" type="text" value={ city } placeholder="City" onChange={ e => handleCity(e.target.value) } />
-                    <input required name="zip" type="text" value={ zip } placeholder="Zip Code" onChange={ e => handleZip(e.target.value) } /> 
+                <form onSubmit={ handleSubmit(handleEditIssue) }>
+                    <input required name="name" type="text" ref={ register } value={ name } placeholder="Issue" onChange={ e => handleName(e.target.value) }  />
+                    <textarea required name="desc" type="text" ref={ register } value={ desc } placeholder="Description" onChange={ e => handleDesc(e.target.value) } />
+                    <input required name="city" type="text" ref={ register } value={ city } placeholder="City" onChange={ e => handleCity(e.target.value) } />
+                    <input required name="zip" type="text" ref={ register } value={ zip } placeholder="Zip Code" onChange={ e => handleZip(e.target.value) } /> 
+                    <ErrorMessages errors={ errors } />
                     <Button type="submit">Save</Button>
                 </form> : null}
     </div>

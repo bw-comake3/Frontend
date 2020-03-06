@@ -64,7 +64,7 @@ const ProtectedRouteAddIssue = ({ history, addIssue }) => {
         .min(5, "Zip code must be a minimum of 5 characters")
         .max(99999, "Zip code cannot exceed 5 characters")
     })
-    const { register, errors, handleSubmit } = useForm({ validationSchema: validationSchema })
+    const { register, errors, handleSubmit } = useForm({ validationSchema })
     useEffect(() => {
         console.log(errors)
     } ,[errors])
