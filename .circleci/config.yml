@@ -23,4 +23,4 @@ jobs:
                   command: npm build
             - run:
                   name: Firebase Deploy
-                  command: runas.exe user:administrator ./node_modules/.bin/firebase deploy --token "1//01RzCohHJqbQ-CgYIARAAGAESNwF-L9IrB0mI-OY25BL540tp2IO5Jok4mwVTIxl2HZE-6QmIKwtD_0zEHi5r4Ykdpu40wCI0Tac" --only hosting
+                  command: sudo ./node_modules/.bin/firebase deploy --token "1//01RzCohHJqbQ-CgYIARAAGAESNwF-L9IrB0mI-OY25BL540tp2IO5Jok4mwVTIxl2HZE-6QmIKwtD_0zEHi5r4Ykdpu40wCI0Tac" --only hosting
