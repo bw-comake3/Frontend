@@ -97,8 +97,9 @@ const ProtectedRouteMyIssue = ({ history, issue, upVote, downVote, editIssue, de
         .max(15, "City cannot exceed 15 characters"),
         zip: yup
         .number()
-        .min(5, "Zip code must be a minimum of 5 characters")
-        .max(99999, "Zip code cannot exceed 5 characters")
+        .integer()
+        .min(501, "Invalid zip code")
+        .max(99950, "Invalid zip code")
     })
     const { errors, register, handleSubmit } = useForm({ validationSchema })
 return (
@@ -109,7 +110,7 @@ return (
               Comake
             </NavbarBrand>
             <NavbarToggler
-              backgroundColor="white"
+              backgroundcolor="white"
               onClick={toggleNavbar}
               className="mr-2"
             />
@@ -140,12 +141,12 @@ return (
              <CardContent>
                 <Typography size="large" gutterBottom variant="h5" component="h2">{ issue.issue }</Typography>
                 <Typography>{ issue.description }</Typography>
-                <Typography className="centerText">
+                <div className="centerText">
                     <div className="displayFlex">
                         <div>Votes </div>
                         <div className="DecorateVoteNum">{ issue.vote }</div>
                     </div>
-                </Typography>
+                </div>
              </CardContent>
              <Divider className={classes.divider} light />
                 <CardActions className="cActions">
@@ -181,7 +182,6 @@ return (
 }
 
 const mapStateToProps = (state) => {
-    console.log(state.singleIssue)
     return { ...state, issue: state.singleIssue }
 }
 

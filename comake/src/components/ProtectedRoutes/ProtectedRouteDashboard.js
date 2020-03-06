@@ -1,45 +1,41 @@
 import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
-import { makeStyles } from '@material-ui/core/styles';
-
-import { Collapse, Navbar, NavbarToggler, NavbarBrand, Nav, NavItem, NavLink } from 'reactstrap';
-
-import Card from '@material-ui/core/Card';
-import CardActionArea from '@material-ui/core/CardActionArea';
-import CardActions from '@material-ui/core/CardActions';
-import CardContent from '@material-ui/core/CardContent';
-import CardMedia from '@material-ui/core/CardMedia';
+import { Collapse, Navbar, NavbarToggler, NavbarBrand, Nav, NavItem, NavLink } from "reactstrap";
+import { makeStyles } from "@material-ui/core/styles";
+import Card from "@material-ui/core/Card";
+import CardActions from "@material-ui/core/CardActions";
+import CardContent from "@material-ui/core/CardContent";
 import Divider from "@material-ui/core/Divider";
-import Button from '@material-ui/core/Button';
-import Typography from '@material-ui/core/Typography';
+import Button from "@material-ui/core/Button";
+import Typography from "@material-ui/core/Typography";
 
 
 
-import { getIssues, upVote, downVote, addIssue } from "../../actions";
+import { getIssues, upVote, downVote } from "../../actions";
 
 const useStyles = makeStyles (theme => ({
 
     root: {
 
-      maxWidth: '65vw',
-      width: '65vw',
+      maxWidth: "65vw",
+      width: "65vw",
       marginTop: 20,
     },
     nava: {
-        height: '150px',
+        height: "150px",
 
     },
     navBar: {
-        backgroundColor: '#17202A',
-        color: '#E5E7E9',
-        marginBottom: '100px',
-        height: '100%'
+        backgroundColor: "#17202A",
+        color: "#E5E7E9",
+        marginBottom: "100px",
+        height: "100%"
     },
     card: {
-        maxWidth: '65vw',
+        maxWidth: "65vw",
         
-        width: '65vw',
+        width: "65vw",
         margin: "10px",
         transition: "0.3s",
         boxShadow: "0 8px 40px -12px rgba(0,0,0,0.3)",
@@ -49,7 +45,7 @@ const useStyles = makeStyles (theme => ({
       },
       divider: {
         margin: `px 0`,
-        padding:'0px 20 0 20'
+        padding:"0px 20 0 20"
       },
   }));
 
@@ -67,11 +63,6 @@ const ProtectedRouteDashboard = ({ history, getIssues, issues, upVote, downVote,
         localStorage.removeItem("token")
         history.push("/")
     }
-    const handleSubmit = (e) => { 
-        e.preventDefault()
-        return null 
-    }
-
     return (
       <div>
         <div className={classes.nava}>
@@ -159,7 +150,6 @@ const ProtectedRouteDashboard = ({ history, getIssues, issues, upVote, downVote,
 }
 
 const mapStateToProps = (state) => {
-    console.log("this is state after render", state)
     return { 
         ...state, issues: state.issues
     }

@@ -1,8 +1,8 @@
-import React,{ useState, useEffect } from "react"
+import React,{ useState } from "react"
 import { connect } from "react-redux";
 import { makeStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
-import { Collapse, Navbar, NavbarToggler, NavbarBrand, Nav, NavItem, NavLink } from "reactstrap";
+import { Collapse, Navbar, NavbarToggler, NavbarBrand, Nav, NavLink } from "reactstrap";
 import * as yup from "yup";
 import { useForm } from "react-hook-form";
 
@@ -61,13 +61,11 @@ const ProtectedRouteAddIssue = ({ history, addIssue }) => {
         .max(15, "City cannot exceed 15 characters"),
         zip: yup
         .number()
-        .min(5, "Zip code must be a minimum of 5 characters")
-        .max(99999, "Zip code cannot exceed 5 characters")
+        .integer()
+        .min(501, "Invalid zip code")
+        .max(99950, "Invalid zip code")
     })
     const { register, errors, handleSubmit } = useForm({ validationSchema })
-    useEffect(() => {
-        console.log(errors)
-    } ,[errors])
 return (
     <form>
         <div className={classes.nava}>

@@ -20,7 +20,6 @@ export const register = (user) => dispatch => {
                 .then(res => {
                     localStorage.setItem("token", res.data.token)
                     localStorage.setItem("id", res.data.id)
-                    console.log(res)
                 })
                 .catch(err => console.log("error logging in automatically", err.message)))
         .catch(err => console.log("error signing up",err.message))
@@ -64,7 +63,7 @@ export const addIssue = (issue) => dispatch => {
 export const editIssue = (id, issue) => dispatch => {
     axiosWithAuth()
         .put(`/api/issues/${ id }`, issue)
-        .then(res => console.log("response from put", res))
+        .then(res => dispatch({ type: EDIT_ISSUE, issue: res.data }))
 }
 
 export const deleteIssue = (id) => dispatch => {

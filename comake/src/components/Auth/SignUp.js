@@ -1,13 +1,11 @@
-import React from 'react'
-import Avatar from '@material-ui/core/Avatar';
-import Button from '@material-ui/core/Button';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import TextField from '@material-ui/core/TextField';
-import Box from '@material-ui/core/Box';
-import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
-import Container from '@material-ui/core/Container';
-import * as yup from 'yup';
+import React from "react"
+import Avatar from "@material-ui/core/Avatar";
+import Button from "@material-ui/core/Button";
+import CssBaseline from "@material-ui/core/CssBaseline";
+import TextField from "@material-ui/core/TextField";
+import Typography from "@material-ui/core/Typography";
+import { makeStyles } from "@material-ui/core/styles";
+import Container from "@material-ui/core/Container";
 import { Link } from "react-router-dom";
 
 import useInput from "../../hooks/input"
@@ -17,16 +15,16 @@ import { connect } from "react-redux";
 const useStyles = makeStyles(theme => ({
     paper: {
         marginTop: theme.spacing(8),
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
     },
     avatar: {
         margin: theme.spacing(1),
         backgroundColor: theme.palette.secondary.main,
     },
     form: {
-        width: '100%', 
+        width: "100%", 
         marginTop: theme.spacing(1),
     },
     submit: {
@@ -35,12 +33,8 @@ const useStyles = makeStyles(theme => ({
 }));
 const SignUp = ({ history, values, errors, touched, register, getUsers}) => {
     const classes = useStyles(); 
-    const [username, handleUsername] = useInput('');
-    const [password, handlePassword] = useInput('');
-    const validationSchema = () => yup.object().shape({
-        username: yup.string().required('enter username'),
-        password: yup.string().required('enter password')  
-    })
+    const [username, handleUsername] = useInput("");
+    const [password, handlePassword] = useInput("");
     const handleSubmit = (e) => { 
         e.preventDefault()
         register({ username, password })
