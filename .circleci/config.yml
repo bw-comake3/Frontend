@@ -1,13 +1,4 @@
-  deploy-job:
-    docker:
-      - image: <docker-image-name-tag>
-    working_directory: ~/repo
-    steps:
-      - run:
-          name: Deploy Master to Firebase
-          command: ./node_modules/.bin/firebase deploy --token=$FIREBASE_TOKEN
-
-workflows:
+  workflows:
   version: 2
   deploy:
     jobs:
@@ -18,4 +9,14 @@ workflows:
           filters:
             branches:
               only: master
+  deploy-job:
+    docker:
+      - image: <docker-image-name-tag>
+    working_directory: ~/repo
+    steps:
+      - run:
+          name: Deploy Master to Firebase
+          command: ./node_modules/.bin/firebase deploy --token=$FIREBASE_TOKEN
+
+
 
