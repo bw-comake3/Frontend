@@ -1,6 +1,6 @@
 import React from 'react'
 
-export default function ErrorMessagesAddIssue({ errors }) {
+export default function ErrorMessages({ errors }) {
     return (
         <>
           {

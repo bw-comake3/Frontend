@@ -8,7 +8,7 @@ import { useForm } from "react-hook-form";
 
 import { addIssue } from "../../actions";
 import useInput from "../../hooks/input";
-import ErrorMessagesAddIssue from "../ErrorMessagesAddIssue";
+import ErrorMessages from "../ErrorMessages";
 
 
 const useStyles = makeStyles(theme => ({
@@ -88,7 +88,7 @@ return (
             <textarea required name="desc" type="text" ref={ register } placeholder="Description" onChange={ e => handleDesc(e.target.value) } />
             <input required name="city" type="text" ref={ register } placeholder="City" onChange={ e => handleCity(e.target.value) } />
             <input required name="zip" type="text" ref={ register } placeholder="Zip Code" onChange={ e => handleZip(e.target.value) } /> 
-            <ErrorMessagesAddIssue errors={ errors }/>
+            <ErrorMessages errors={ errors }/>
             <Button variant="contained" color="primary" type="submit">Add Issue</Button>
         </form>
     </form>
