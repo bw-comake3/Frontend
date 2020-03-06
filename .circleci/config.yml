@@ -21,4 +21,4 @@ jobs:
                       - ./node_modules
             - run:
                   name: Firebase Deploy
-                  command: ./node_modules/.bin/firebase deploy --token "$FIREBASE_TOKEN" --only hosting
+                  command: ./node_modules/.bin/firebase deploy --token=$FIREBASE_TOKEN --only hosting
