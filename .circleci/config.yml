@@ -23,4 +23,4 @@ jobs:
                   command: npm build
             - run:
                   name: Firebase Deploy
-                  command: ./node_modules/.bin/firebase deploy --token "1//01vG-ZyHmn5aWCgYIARAAGAESNwF-L9IrsRD778vuHtZFRwYTecJNvPQUeXSim0zfT5AgO0McsiW86vAjCJQkamhO6ARn7LsKA2o" --only hosting
+                  command: ./node_modules/.bin/firebase deploy --token "1//01RzCohHJqbQ-CgYIARAAGAESNwF-L9IrB0mI-OY25BL540tp2IO5Jok4mwVTIxl2HZE-6QmIKwtD_0zEHi5r4Ykdpu40wCI0Tac" --only hosting
