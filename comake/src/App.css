@@ -83,3 +83,7 @@ html{
     color: red;
     font-size: 1rem;
 }
+.description {
+    word-wrap: break-word;
+    height: fit-content;
+}

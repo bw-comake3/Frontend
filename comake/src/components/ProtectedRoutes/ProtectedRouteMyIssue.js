@@ -140,7 +140,7 @@ return (
         <Card className={classes.card}  key={ Math.random() }>
              <CardContent>
                 <Typography size="large" gutterBottom variant="h5" component="h2">{ issue.issue }</Typography>
-                <Typography>{ issue.description }</Typography>
+                <Typography className="description">{ issue.description }</Typography>
                 <div className="centerText">
                     <div className="displayFlex">
                         <div>Votes </div>

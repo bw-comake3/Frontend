@@ -107,7 +107,7 @@ const ProtectedRouteDashboard = ({ history, getIssues, issues, upVote, downVote,
                 >
                   <Link to={`/issues/${issue.id}`}>{issue.issue}</Link>
                 </Typography>
-                <Typography>{issue.description}</Typography>
+                <Typography className="description">{issue.description}</Typography>
                 <Typography className="centerText">
                   <div className="displayFlex">
                     <div>Votes </div>
